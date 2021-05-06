@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, FlatList, Alert } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Alert, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Header from './components/header';
 import TaskItem from './components/taskItem';
 import AddTask from './components/addTask';
@@ -31,23 +31,29 @@ export default function App() {
         {text: 'Understood', onPress: () => console.log('alert closed')}
       ]);
     }
+    Keyboard.dismiss();
   };
 
   return (
-    <View style={styles.container}>
-      <Header />
-      <View style={styles.content}>
-        <AddTask submitHandler={submitHandler} />
-        <View style={styles.list}>
-          <FlatList
-            data={tasks}
-            renderItem={({ item }) => (
-              <TaskItem item={item} pressHandler={pressHandler} />
-            )}
-           />
+    <TouchableWithoutFeedback onPress={() => {
+      Keyboard.dismiss();
+      console.log('dismissed keyboard');
+    }}>
+      <View style={styles.container}>
+        <Header />
+        <View style={styles.content}>
+          <AddTask submitHandler={submitHandler} />
+          <View style={styles.list}>
+            <FlatList
+              data={tasks}
+              renderItem={({ item }) => (
+                <TaskItem item={item} pressHandler={pressHandler} />
+              )}
+            />
+          </View>
         </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -57,9 +63,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   content: {
-    padding: 40,
+    flex: 1,
+    padding: 40
   },
   list: {
+    flex: 1,
     marginTop: 20
   }
 });
