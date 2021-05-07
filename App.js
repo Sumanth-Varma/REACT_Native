@@ -1,73 +1,28 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, FlatList, Alert, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import Header from './components/header';
-import TaskItem from './components/taskItem';
-import AddTask from './components/addTask';
+import * as Font from 'expo-font';
+import AppLoading from 'expo-app-loading';
+import Navigator from './routes/drawer';
+
+const getFonts = () => Font.loadAsync({
+  'girassol-regular': require('./assets/fonts/Girassol-Regular.ttf'),
+  'merriweather-bold': require('./assets/fonts/Merriweather-Bold.ttf'),
+  'merriweather-italic': require('./assets/fonts/Merriweather-Italic.ttf'),
+});
 
 export default function App() {
-  const [tasks, setTasks] = useState([
-    { text: 'milk', key: '1'},
-    { text: 'oranges', key: '2'},
-    { text: 'bread', key: '3'},
-  ]);
-  
-  const pressHandler = (key) => {
-    setTasks(prevTasks => {
-      return prevTasks.filter(task => task.key != key);
-    });
-  };
+  const [fontsLoaded, setFontsLoaded] = useState(false);
 
-  const submitHandler = (text) => {
-
-    if (text.length > 2) {
-      setTasks((prevTasks) => {
-        return [
-          { text: text, key: Math.random().toString() },
-          ...prevTasks
-        ];
-      });
-    } else {
-      Alert.alert('OOPS!', 'Tasks Must be over 2 characters long', [
-        {text: 'Understood', onPress: () => console.log('alert closed')}
-      ]);
-    }
-    Keyboard.dismiss();
-  };
-
-  return (
-    <TouchableWithoutFeedback onPress={() => {
-      Keyboard.dismiss();
-      console.log('dismissed keyboard');
-    }}>
-      <View style={styles.container}>
-        <Header />
-        <View style={styles.content}>
-          <AddTask submitHandler={submitHandler} />
-          <View style={styles.list}>
-            <FlatList
-              data={tasks}
-              renderItem={({ item }) => (
-                <TaskItem item={item} pressHandler={pressHandler} />
-              )}
-            />
-          </View>
-        </View>
-      </View>
-    </TouchableWithoutFeedback>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  content: {
-    flex: 1,
-    padding: 40
-  },
-  list: {
-    flex: 1,
-    marginTop: 20
+  if (fontsLoaded) {
+    return (
+        <Navigator />
+    );
+  } else {
+    return (
+      <AppLoading 
+        startAsync={getFonts} 
+        onFinish={() => setFontsLoaded(true)}
+        onError={console.warn} 
+      />
+    )
   }
-});
+}
