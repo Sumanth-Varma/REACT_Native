@@ -12,7 +12,7 @@ export default function TaskHome({ navigation }) {
     });
   };
 
-  const submitHandler = (text) => {
+  const submitHandler = (text, actions) => {
 
     if (text.length > 2) {
       setTasks((prevTasks) => {
