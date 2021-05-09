@@ -16,7 +16,7 @@ export default function AddTask({ submitHandler }) {
                 placeholder='Add tasks...'
                 onChangeText={changeHandler}
             />
-            <AntDesign name="plus" size={24} color="black" onPress={() => submitHandler(text)}/>
+            <AntDesign name="plus" size={24} color="black" onPress={() => submitHandler(text)} />
         </View>
     )
 }
